@@ -309,6 +309,7 @@ export function ChatPanelInteractive({
           total_execution_time_ms?: number;
           prompt_tokens?: number;
           completion_tokens?: number;
+          estimated_cost_usd?: number;
         };
       };
 
@@ -373,6 +374,7 @@ export function ChatPanelInteractive({
           latencyMs: data.telemetry?.total_execution_time_ms ?? 100,
           promptTokens: data.telemetry?.prompt_tokens ?? 0,
           completionTokens: data.telemetry?.completion_tokens ?? 0,
+          costUsd: data.telemetry?.estimated_cost_usd ?? 0.0,
           steps: data.steps ?? [],
         });
       }
