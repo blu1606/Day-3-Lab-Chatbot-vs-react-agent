@@ -11,6 +11,12 @@ export function AgentTraceViewer() {
   const [activeSessionId, setActiveSessionId] = useState("session-cohort");
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [customTrace, setCustomTrace] = useState<any>(null);
+
+  // Reset custom trace when changing sessions
+  useEffect(() => {
+    setCustomTrace(null);
+  }, [activeSessionId]);
 
   // Resize states
   const [sidebarWidth, setSidebarWidth] = useState(280);
@@ -19,7 +25,7 @@ export function AgentTraceViewer() {
   const [isResizingRight, setIsResizingRight] = useState(false);
 
   const handleNewChat = () => {
-    setActiveSessionId("session-cohort");
+    setActiveSessionId(`session-new-${Date.now()}`);
   };
 
   const startResizeSidebar = (e: React.MouseEvent) => {
@@ -94,7 +100,7 @@ export function AgentTraceViewer() {
 
         {/* Middle Panel - Chat */}
         <div className="flex-1 min-w-0 h-full">
-          <ChatPanelInteractive activeSessionId={activeSessionId} />
+          <ChatPanelInteractive activeSessionId={activeSessionId} onTraceUpdate={setCustomTrace} />
         </div>
 
         {/* Resizer for Right Panel */}
@@ -113,7 +119,7 @@ export function AgentTraceViewer() {
         {/* Right Panel - Trace */}
         {showRightPanel && (
           <div style={{ width: rightPanelWidth }} className="flex shrink-0 h-full">
-            <TraceRailInteractive activeSessionId={activeSessionId} />
+            <TraceRailInteractive activeSessionId={activeSessionId} customTrace={customTrace} />
           </div>
         )}
       </section>

@@ -58,9 +58,24 @@ export function SidebarUnified({
   const pathname = usePathname() || "";
   const [localIsCollapsed, setLocalIsCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("chat");
+  const [sessions, setSessions] = useState<ChatSession[]>(mockSessions);
 
   const isCollapsed = controlledIsCollapsed !== undefined ? controlledIsCollapsed : localIsCollapsed;
   const toggleCollapse = controlledOnToggleCollapse || (() => setLocalIsCollapsed(!localIsCollapsed));
+
+  // Dynamic session tracking
+  useEffect(() => {
+    if (activeSessionId && !sessions.some((s) => s.id === activeSessionId)) {
+      const newSession: ChatSession = {
+        id: activeSessionId,
+        title: activeSessionId.startsWith("session-new") ? "New Diagnostic Chat" : "Dynamic Session",
+        lastMessage: "Chuyện trò mới chưa lưu...",
+        timestamp: Date.now(),
+        messageCount: 0,
+      };
+      setSessions((prev) => [...prev, newSession]);
+    }
+  }, [activeSessionId, sessions]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -187,7 +202,7 @@ export function SidebarUnified({
         </div>
 
         <div className="flex-1 overflow-auto px-2 pb-2 space-y-1">
-          {mockSessions.map((session) => {
+          {sessions.map((session) => {
             const isSelected = activeSessionId === session.id;
             return (
               <button

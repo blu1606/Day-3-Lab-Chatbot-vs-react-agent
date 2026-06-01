@@ -48,7 +48,7 @@ class ReActAgent:
 
     def run(self, user_input: str) -> str:
         """
-        TODO: Implement the ReAct loop logic.
+        Implement the ReAct loop logic.
         1. Generate Thought + Action.
         2. Parse Action and execute Tool.
         3. Append Observation to prompt and repeat until Final Answer.
@@ -61,13 +61,20 @@ class ReActAgent:
         while steps < self.max_steps:
             result = self.llm.generate(current_prompt, system_prompt=self.get_system_prompt())
             content = result.get("content", "")
-            self.history.append(
-                {
-                    "step": steps + 1,
-                    "prompt": current_prompt,
-                    "response": content,
-                }
-            )
+            
+            history_item = {
+                "step": steps + 1,
+                "prompt": current_prompt,
+                "response": content,
+                "usage": result.get("usage", {}),
+                "provider": result.get("provider", "unknown"),
+                "latency_ms": result.get("latency_ms", 0),
+                "tool_name": None,
+                "tool_args": None,
+                "observation": None,
+                "tool_duration_ms": 0,
+            }
+            self.history.append(history_item)
 
             tracker.track_request(
                 provider=result.get("provider", "unknown"),
@@ -84,10 +91,17 @@ class ReActAgent:
             action = self._parse_action(content)
             if action:
                 tool_name, args = action
+                history_item["tool_name"] = tool_name
+                history_item["tool_args"] = args
+                
                 start_time = time.time()
                 logger.log_event("TOOL_START", {"tool_name": tool_name, "arguments": args})
                 observation = self._execute_tool(tool_name, args)
                 execution_time_ms = int((time.time() - start_time) * 1000)
+                
+                history_item["observation"] = observation
+                history_item["tool_duration_ms"] = execution_time_ms
+                
                 logger.log_event(
                     "TOOL_END",
                     {
