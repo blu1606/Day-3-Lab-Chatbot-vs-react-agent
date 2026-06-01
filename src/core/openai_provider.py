@@ -26,10 +26,13 @@ class OpenAIProvider(LLMProvider):
 
         # Extraction from OpenAI response
         content = response.choices[0].message.content
+        prompt_details = getattr(response.usage, "prompt_tokens_details", None)
+        cached_tokens = getattr(prompt_details, "cached_tokens", 0) if prompt_details else 0
         usage = {
             "prompt_tokens": response.usage.prompt_tokens,
             "completion_tokens": response.usage.completion_tokens,
-            "total_tokens": response.usage.total_tokens
+            "total_tokens": response.usage.total_tokens,
+            "cached_tokens": cached_tokens
         }
 
         return {

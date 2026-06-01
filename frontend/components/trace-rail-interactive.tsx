@@ -50,10 +50,11 @@ export function TraceRailInteractive({
         <Clock3 className="size-4 text-[rgba(11,9,7,0.4)]" />
       </div>
 
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-4 gap-2 mb-4">
         <Metric label="Latency" value={`${activeTrace.latencyMs}ms`} warning={activeTrace.latencyMs > 5000} />
         <Metric label="Prompt" value={String(activeTrace.promptTokens)} />
         <Metric label="Output" value={String(activeTrace.completionTokens)} />
+        <Metric label="Cost" value={activeTrace.costUsd !== undefined ? `$${activeTrace.costUsd.toFixed(6)}` : "$0.000000"} />
       </div>
 
       <div className="rounded-xl border border-[rgba(11,9,7,0.08)] bg-[#fefcf5] p-3 mb-4">
