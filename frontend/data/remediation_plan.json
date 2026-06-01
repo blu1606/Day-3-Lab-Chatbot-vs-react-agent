@@ -1,0 +1,32 @@
+[
+  {
+    "group_name": "Needs Foundation",
+    "actions": [
+      "Tổ chức buổi học bổ sung về các khái niệm cơ bản (evaluation, prompting, reasoning)",
+      "Cung cấp tài liệu học tập bổ sung và video hướng dẫn chi tiết",
+      "Lên lịch một-một mentoring với giảng viên để làm rõ khó khăn",
+      "Giao bài tập thực hành nhẹ nhàng và có hướng dẫn từng bước",
+      "Theo dõi tiến độ hàng tuần và điều chỉnh chiến lược hỗ trợ"
+    ]
+  },
+  {
+    "group_name": "Needs Practice",
+    "actions": [
+      "Cung cấp bộ bài tập nâng cao về agentic loops và reasoning",
+      "Tổ chức các phiên thực hành nhóm nhỏ với sự hướng dẫn",
+      "Khuyến khích tham gia các cuộc thảo luận và chia sẻ kinh nghiệm",
+      "Đưa ra các project mini để áp dụng kiến thức vào thực tế",
+      "Cấu trúc các bài học từ dễ đến khó để xây dựng sự tự tin"
+    ]
+  },
+  {
+    "group_name": "Ready for Advanced",
+    "actions": [
+      "Giao các dự án phức tạp liên quan đến tích hợp nhiều khái niệm",
+      "Mời học viên trở thành peer mentor cho các nhóm khác",
+      "Cung cấp tài liệu nghiên cứu nâng cao và các case study thực tế",
+      "Khuyến khích khám phá các ứng dụng tiên tiến của AI Agent",
+      "Chuẩn bị cho các cơ hội thực tập hoặc dự án thực tế"
+    ]
+  }
+]
