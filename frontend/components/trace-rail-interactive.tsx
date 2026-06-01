@@ -19,11 +19,16 @@ const stepIcons = {
 
 export function TraceRailInteractive({
   activeSessionId,
+  customTrace,
 }: {
   activeSessionId: string;
+  customTrace?: any;
 }) {
   // Retrieve current active trace details
   const activeTrace: AgentTrace = (() => {
+    if (customTrace) {
+      return customTrace;
+    }
     if (activeSessionId === "session-security") {
       return traces.find((t) => t.id === "security-blocked") || traces[1];
     }

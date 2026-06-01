@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -25,7 +25,8 @@ import type { Student, StudentGroup, CohortSummary } from "@/lib/types";
 import { mockReports, type DiagnosticReportVersion } from "@/lib/mock-reports";
 import { SidebarUnified } from "@/components/sidebar-unified";
 
-export default function StudentsPage() {
+export function StudentsPageContent() {
+  const searchParams = useSearchParams();
   const [students, setStudents] = useState<Student[]>([]);
   const [groups, setGroups] = useState<StudentGroup[]>([]);
   const [cohort, setCohort] = useState<CohortSummary | null>(null);
@@ -100,18 +101,15 @@ export default function StudentsPage() {
 
   // Listen to tab query changes dynamically to switch views
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get("tab");
-      if (tabParam === "reports") {
-        setLeftNavMode("reports");
-      } else if (tabParam === "class") {
-        setLeftNavMode("reports"); // Map class to reports summary
-      } else {
-        setLeftNavMode("students");
-      }
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "reports") {
+      setLeftNavMode("reports");
+    } else if (tabParam === "class") {
+      setLeftNavMode("reports"); // Map class to reports summary
+    } else {
+      setLeftNavMode("students");
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     async function load() {
@@ -657,6 +655,18 @@ export default function StudentsPage() {
         )}
       </section>
     </main>
+  );
+}
+
+export default function StudentsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-screen items-center justify-center bg-[#f2efe4] font-mono text-sm text-[#3c3a39]">
+        /loading-cohort-directory...
+      </div>
+    }>
+      <StudentsPageContent />
+    </Suspense>
   );
 }
 

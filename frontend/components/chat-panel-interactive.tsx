@@ -34,12 +34,15 @@ const stepIcons = {
 
 export function ChatPanelInteractive({
   activeSessionId,
+  onTraceUpdate,
 }: {
   activeSessionId: string;
+  onTraceUpdate?: (trace: any) => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isMockMode, setIsMockMode] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Load initial session messages
@@ -128,6 +131,15 @@ export function ChatPanelInteractive({
           })),
         },
       ];
+    } else {
+      initialMsg = [
+        {
+          id: "msg-welcome",
+          role: "assistant",
+          content: "Xin chào! Tôi là GapTutor AI Agent. Bạn hãy đặt câu hỏi để tôi chẩn đoán thông tin của cohort hoặc học viên nhé.",
+          timestamp: Date.now(),
+        }
+      ];
     }
     setMessages(initialMsg);
   }, [activeSessionId]);
@@ -213,6 +225,9 @@ export function ChatPanelInteractive({
               : msg
           )
         );
+        if (onTraceUpdate) {
+          onTraceUpdate(sourceTrace);
+        }
       }
     };
 
@@ -243,6 +258,12 @@ export function ChatPanelInteractive({
 
     setMessages((prev) => [...prev, userMessage, initialAssistantMsg]);
     setIsTyping(true);
+
+    if (isMockMode) {
+      runLocalTraceSimulation(userText, assistantMsgId);
+      setIsTyping(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/diagnose", {
@@ -307,6 +328,18 @@ export function ChatPanelInteractive({
             : msg
         )
       );
+
+      if (onTraceUpdate) {
+        onTraceUpdate({
+          id: data.task_id,
+          query: userText,
+          summary: data.summary,
+          latencyMs: data.telemetry?.total_execution_time_ms ?? 100,
+          promptTokens: data.telemetry?.prompt_tokens ?? 0,
+          completionTokens: data.telemetry?.completion_tokens ?? 0,
+          steps: data.steps ?? [],
+        });
+      }
     } catch {
       runLocalTraceSimulation(userText, assistantMsgId);
     } finally {
@@ -330,9 +363,23 @@ export function ChatPanelInteractive({
             /interactive-agent-diagnostics
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-full border border-[rgba(11,9,7,0.12)] bg-[#fefcf5] px-3 py-1.5 font-mono text-[10px] text-[rgba(11,9,7,0.5)] font-semibold shadow-sm">
-          <PanelRight className="size-3.5 text-[#2677ff]" />
-          /interactive-mode
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsMockMode(!isMockMode)}
+            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[10px] font-bold shadow-sm transition-all cursor-pointer ${
+              isMockMode
+                ? "border-amber-500/30 bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
+                : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+            }`}
+            type="button"
+          >
+            <span className={`size-1.5 rounded-full ${isMockMode ? "bg-amber-500 animate-pulse" : "bg-emerald-500 animate-pulse"}`} />
+            {isMockMode ? "Sandbox Mock Mode" : "Live API Mode"}
+          </button>
+          <div className="flex items-center gap-2 rounded-full border border-[rgba(11,9,7,0.12)] bg-[#fefcf5] px-3 py-1.5 font-mono text-[10px] text-[rgba(11,9,7,0.5)] font-semibold shadow-sm">
+            <PanelRight className="size-3.5 text-[#2677ff]" />
+            /interactive
+          </div>
         </div>
       </div>
 
