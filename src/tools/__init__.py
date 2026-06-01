@@ -7,6 +7,7 @@ from src.tools.student_analysis_tools import (
     detect_learning_risks,
     group_students,
     generate_remediation_plan,
+    generate_report_student,
     get_student_detail
 )
 
@@ -73,6 +74,16 @@ ALL_TOOLS = [
         },
         "output_schema": "array of remediation plans per group containing specific recommended actions",
         "func": generate_remediation_plan
+    },
+    {
+        "name": "generate_report_student",
+        "description": "Tạo response API báo cáo tình trạng học tập của toàn bộ học viên, gồm nhóm học tập, risk level, evidence, diagnosis và next actions.",
+        "input_schema": {
+            "students": "array of student data (tùy chọn)",
+            "session_id": "string (tùy chọn, mặc định session-03)"
+        },
+        "output_schema": "student status report with total_students, group_counts, risk_flags and per-student reports",
+        "func": generate_report_student
     },
     {
         "name": "get_student_detail",

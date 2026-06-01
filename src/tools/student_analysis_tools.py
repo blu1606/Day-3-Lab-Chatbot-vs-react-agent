@@ -246,6 +246,86 @@ def generate_remediation_plan(groups: List[Dict[str, Any]], weak_concepts: List[
 
     return plan
 
+def generate_report_student(students: Optional[List[Dict[str, Any]]] = None, session_id: str = "session-03") -> Dict[str, Any]:
+    """
+    CONTRACT: generate_report_student
+    Description: Tạo response API tổng hợp tình trạng học tập của toàn bộ học viên.
+    Input:
+      - students: Danh sách học viên tùy chọn. Nếu không truyền, tool sẽ đọc data/students.json và mock fallback.
+      - session_id: Mã buổi học dùng khi cần fallback dữ liệu.
+    Output: Dict JSON-serializable gồm summary, số lượng theo nhóm, risk flags, và report từng học viên.
+    """
+    report_students = students if students is not None else _get_session_students(session_id)
+    risk_flags = detect_learning_risks(report_students)
+    groups = group_students(report_students, risk_flags)
+    risks_by_student = _risk_map(risk_flags)
+    group_by_student = {
+        student["student_id"]: group["group_name"]
+        for group in groups
+        for student in group["students"]
+    }
+    group_counts = {
+        group["group_name"]: len(group["students"])
+        for group in groups
+    }
+
+    student_reports = []
+    for student in report_students:
+        average_mastery = round(_average_mastery(student))
+        weak_concepts = _weak_concepts(student)
+        risk = risks_by_student.get(student["student_id"], {})
+        risk_flags_for_student = risk.get("flags", [])
+        evidence = risk.get("evidence", [])
+        group_name = group_by_student.get(student["student_id"], "Unassigned")
+
+        if group_name == "Needs Foundation":
+            risk_level = "high"
+        elif group_name == "Needs Practice":
+            risk_level = "medium"
+        else:
+            risk_level = "low"
+
+        if weak_concepts:
+            diagnosis = (
+                f"{student['name']} cần hỗ trợ ở {', '.join(weak_concepts)} "
+                f"với average mastery {average_mastery}%."
+            )
+            next_actions = [f"Ôn lại {concept}" for concept in weak_concepts[:3]]
+        else:
+            diagnosis = (
+                f"{student['name']} đang nắm tốt các concept chính "
+                f"với average mastery {average_mastery}%."
+            )
+            next_actions = ["Giao bài nâng cao hoặc peer review cho nhóm cần luyện tập."]
+
+        if student.get("variant_question_result") == "wrong":
+            next_actions.append("Làm lại câu hỏi biến thể và giải thích bằng evidence.")
+
+        student_reports.append(
+            {
+                "student_id": student["student_id"],
+                "name": student["name"],
+                "background": student.get("background", "non-tech"),
+                "average_mastery": average_mastery,
+                "group_name": group_name,
+                "risk_level": risk_level,
+                "risk_flags": risk_flags_for_student,
+                "weak_concepts": weak_concepts,
+                "evidence": evidence,
+                "diagnosis": diagnosis,
+                "next_actions": next_actions,
+            }
+        )
+
+    return {
+        "report_type": "student_status_report",
+        "total_students": len(report_students),
+        "at_risk_count": len(risk_flags),
+        "group_counts": group_counts,
+        "risk_flags": risk_flags,
+        "students": student_reports,
+    }
+
 def get_student_detail(student_id: str, session_id: str) -> Dict[str, Any]:
     """
     CONTRACT: get_student_detail
