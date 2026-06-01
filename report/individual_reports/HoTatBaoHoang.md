@@ -8,11 +8,13 @@
 
 ## I. Technical Contribution (15 Points)
 
-Đóng góp chính của tôi là **thiết kế hệ thống đặc tả dữ liệu (Data Contracts)** và **tài liệu hóa kiến trúc** làm "Source of Truth" giúp đồng bộ toàn bộ dự án:
+Đóng góp chính của tôi bao gồm **thiết kế hệ thống đặc tả dữ liệu (Data Contracts)**, **phát triển API Backend/Frontend** và **tài liệu hóa kiến trúc** dự án:
 
 - **Modules Implementated**:
-  - Khởi tạo 4 file schema YAML chuẩn tại thư mục `contracts/` định nghĩa cấu trúc dữ liệu học viên, đặc tả tham số gọi công cụ (tool calls), logs hiệu năng (telemetry) và mã lỗi chuẩn hóa hệ thống.
-  - Viết tài liệu kỹ thuật tại [data-schemas.md](file:///d:/CODE/AITHUCCHIEN/LABS/Day-3-Lab-Chatbot-vs-react-agent/docs/data-schemas.md) quy định cấu trúc JSON render UI và các tài liệu bổ trợ xử lý lỗi, bảo mật, API endpoint tại thư mục `docs/`.
+  - **Data Contracts & Architecture**: Khởi tạo 4 file schema YAML tại thư mục `contracts/` định nghĩa cấu trúc dữ liệu học viên, đặc tả tham số gọi công cụ (tool calls), logs telemetry và mã lỗi. Viết tài liệu kỹ thuật tại `docs/data-schemas.md`.
+  - **Frontend UI & Diagnostics**: Phát triển giao diện Next.js, khắc phục triệt để lỗi tràn layout chat bằng cách tối ưu CSS Flexbox (`h-full` constraint), đảm bảo giao diện cuộn mượt mà khi hiển thị luồng tư duy (`thinking_logs`), các tín hiệu telemetry và logs của AI Agent.
+  - **FastAPI Backend API**: Thiết lập API Server bằng FastAPI (`src/api/main.py`), xây dựng các endpoints `/api/v1/diagnose` và `/health` tích hợp toàn bộ pipeline phân tích dữ liệu lớp học.
+  - **Mock Model & Registry**: Hiện thực `MockProvider` mô phỏng LLM phản hồi, tính toán token/độ trễ và thiết lập bộ đăng ký cơ sở dữ liệu mẫu của học viên phục vụ kiểm thử cục bộ.
 
 - **Code Highlights**:
   *Định nghĩa quy tắc phát hiện học vẹt (fake_understanding) tại [gaptutor-data-contract.yaml](file:///d:/CODE/AITHUCCHIEN/LABS/Day-3-Lab-Chatbot-vs-react-agent/contracts/gaptutor-data-contract.yaml#L46-L50):*
