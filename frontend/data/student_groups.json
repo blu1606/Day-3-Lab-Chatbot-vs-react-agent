@@ -1,0 +1,62 @@
+[
+  {
+    "group_name": "Needs Foundation",
+    "students": [
+      {
+        "student_id": "STU003",
+        "name": "Lê Minh C"
+      },
+      {
+        "student_id": "STU006",
+        "name": "Vũ Thị F"
+      }
+    ],
+    "reason": "Học viên đạt điểm dưới 50 trong bài kiểm tra chẩn đoán, chưa nắm vững khái niệm cơ bản",
+    "weak_concepts": [
+      "agentic_loops",
+      "reasoning",
+      "evaluation"
+    ]
+  },
+  {
+    "group_name": "Needs Practice",
+    "students": [
+      {
+        "student_id": "STU004",
+        "name": "Phạm Đức D"
+      },
+      {
+        "student_id": "STU005",
+        "name": "Hoàng Anh E"
+      },
+      {
+        "student_id": "STU008",
+        "name": "Tô Thị H"
+      }
+    ],
+    "reason": "Học viên đạt điểm 50-75, hiểu được các khái niệm cơ bản nhưng cần luyện tập để cải thiện",
+    "weak_concepts": [
+      "agentic_loops",
+      "reasoning"
+    ]
+  },
+  {
+    "group_name": "Ready for Advanced",
+    "students": [
+      {
+        "student_id": "STU001",
+        "name": "Nguyễn Văn A"
+      },
+      {
+        "student_id": "STU002",
+        "name": "Trần Thị B"
+      },
+      {
+        "student_id": "STU007",
+        "name": "Đặng Quang G"
+      }
+    ],
+    "reason": "Học viên đạt điểm trên 75, nắm vững các khái niệm và sẵn sàng cho các bài tập nâng cao",
+    "weak_concepts": []
+  }
+]
