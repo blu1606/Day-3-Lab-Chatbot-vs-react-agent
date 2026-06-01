@@ -1,0 +1,32 @@
+[
+  {
+    "concept": "agentic_loops",
+    "average_mastery": 54,
+    "weak_student_count": 6,
+    "weak_percentage": 75
+  },
+  {
+    "concept": "reasoning",
+    "average_mastery": 59,
+    "weak_student_count": 5,
+    "weak_percentage": 62
+  },
+  {
+    "concept": "evaluation",
+    "average_mastery": 67,
+    "weak_student_count": 4,
+    "weak_percentage": 50
+  },
+  {
+    "concept": "tool_use",
+    "average_mastery": 71,
+    "weak_student_count": 3,
+    "weak_percentage": 38
+  },
+  {
+    "concept": "prompting",
+    "average_mastery": 76,
+    "weak_student_count": 2,
+    "weak_percentage": 25
+  }
+]
