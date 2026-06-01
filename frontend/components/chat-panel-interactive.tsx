@@ -12,6 +12,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { traces, type AgentTrace } from "@/lib/mock-traces";
 import type { ChatMessage, SimulatedStep } from "@/lib/types";
 
@@ -44,9 +45,26 @@ export function ChatPanelInteractive({
   const [isTyping, setIsTyping] = useState(false);
   const [isMockMode, setIsMockMode] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const currentSessionIdRef = useRef(activeSessionId);
 
-  // Load initial session messages
+  // Load initial session messages or restore from localStorage
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("gaptutor_messages_" + activeSessionId);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved) as ChatMessage[];
+          if (parsed && parsed.length > 0) {
+            setMessages(parsed);
+            currentSessionIdRef.current = activeSessionId;
+            return;
+          }
+        } catch (e) {
+          console.error("Failed to parse saved messages", e);
+        }
+      }
+    }
+
     let initialMsg: ChatMessage[] = [];
     if (activeSessionId === "session-cohort") {
       const trace = traces.find((t) => t.id === "success-cohort-diagnostic")!;
@@ -142,7 +160,19 @@ export function ChatPanelInteractive({
       ];
     }
     setMessages(initialMsg);
+    currentSessionIdRef.current = activeSessionId;
   }, [activeSessionId]);
+
+  // Save messages to localStorage whenever they change, isolated by activeSessionId
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      messages.length > 0 &&
+      currentSessionIdRef.current === activeSessionId
+    ) {
+      localStorage.setItem("gaptutor_messages_" + activeSessionId, JSON.stringify(messages));
+    }
+  }, [messages, activeSessionId]);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -274,6 +304,12 @@ export function ChatPanelInteractive({
       const data = await response.json() as DiagnoseResponse & {
         error_code?: string;
         message?: string;
+        task_id?: string;
+        telemetry?: {
+          total_execution_time_ms?: number;
+          prompt_tokens?: number;
+          completion_tokens?: number;
+        };
       };
 
       if (!response.ok) {
@@ -408,8 +444,8 @@ export function ChatPanelInteractive({
                     </div>
                   ) : (
                     msg.content && (
-                      <div className="max-w-3xl rounded-2xl rounded-tl-none border border-[rgba(11,9,7,0.08)] bg-[#f7f7f5] px-4 py-3 text-sm leading-6 text-[#3c3a39]">
-                        {msg.content}
+                      <div className="max-w-3xl rounded-2xl rounded-tl-none border border-[rgba(11,9,7,0.08)] bg-[#f7f7f5] px-4 py-3 text-sm leading-6 text-[#3c3a39] prose max-w-none">
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     )
                   )}
@@ -515,7 +551,9 @@ function InlineThinkingLine({ step }: { step: SimulatedStep }) {
             {step.title}
           </span>
         </div>
-        <p className="text-sm leading-6 text-[rgba(11,9,7,0.6)]">{step.content}</p>
+        <div className="text-sm leading-6 text-[rgba(11,9,7,0.6)] prose max-w-none">
+          <ReactMarkdown>{step.content}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );

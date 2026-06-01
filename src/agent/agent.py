@@ -41,6 +41,7 @@ class ReActAgent:
         Final Answer: your final response.
 
         Rules:
+        - BẮT BUỘC: Sau khi viết dòng 'Action: tên_công_cụ({...})', bạn phải DỪNG phát sinh thêm văn bản ngay lập tức. TUYỆT ĐỐI không tự viết dòng 'Observation:' hay 'Final Answer:'. Hãy để hệ thống thực thi công cụ và trả về kết quả thật cho bạn.
         - Do not invent student data.
         - Every diagnosis must follow claim -> evidence -> recommendation.
         - Only output a Final Answer when you have enough evidence.
@@ -61,6 +62,11 @@ class ReActAgent:
         while steps < self.max_steps:
             result = self.llm.generate(current_prompt, system_prompt=self.get_system_prompt())
             content = result.get("content", "")
+            
+            # Programmatic guardrail: Truncate at Observation to prevent the LLM from hallucinating observations in a single turn
+            obs_match = re.search(r"\b(observation|Observation|OBSERVATION)\s*:", content)
+            if obs_match:
+                content = content[:obs_match.start()].strip()
             
             history_item = {
                 "step": steps + 1,
@@ -138,6 +144,7 @@ class ReActAgent:
         """
         Helper method to execute tools by name.
         """
+        
         for tool in self.tools:
             if tool['name'] == tool_name:
                 function = tool.get("function") or tool.get("func")
@@ -145,12 +152,28 @@ class ReActAgent:
                     return f"Tool {tool_name} has no executable function."
 
                 parsed_args = self._parse_tool_args(args)
-                if isinstance(parsed_args, dict):
-                    return function(**parsed_args)
-                if isinstance(parsed_args, list):
-                    return function(*parsed_args)
-                return function(parsed_args)
-        return f"Tool {tool_name} not found."
+                try:
+                    if isinstance(parsed_args, dict):
+                        return function(**parsed_args)
+                    if isinstance(parsed_args, list):
+                        return function(*parsed_args)
+                    if parsed_args == "Ellipsis" or parsed_args is Ellipsis:
+                        return function()
+                    return function(parsed_args)
+                except TypeError:
+                    # If positional binding fails due to argument mismatch, try executing without arguments
+                    try:
+                        return function()
+                    except Exception as e:
+                        return f"Error executing tool {tool_name}: {str(e)}"
+                except Exception as e:
+                    return f"Error executing tool {tool_name}: {str(e)}"
+        valid_tool_names = [t['name'] for t in self.tools]
+        return (
+            f"Lỗi: Không tìm thấy công cụ '{tool_name}' trên hệ thống (Tool {tool_name} not found).\n"
+            f"Danh sách các công cụ hợp lệ bạn có thể sử dụng:\n" +
+            "\n".join([f"- {name}" for name in valid_tool_names])
+        )
 
     def _parse_action(self, content: str) -> Optional[tuple[str, str]]:
         match = re.search(r"Action:\s*([a-zA-Z_][\w]*)\s*\((.*)\)", content, re.DOTALL)
