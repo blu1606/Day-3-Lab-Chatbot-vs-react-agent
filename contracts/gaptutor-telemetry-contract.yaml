@@ -1,0 +1,37 @@
+# GapTutor Telemetry Contract - Demo 4 Giờ
+# Định nghĩa cấu trúc tối giản của Logs và Tokens phục vụ hiển thị Terminal.
+
+version: "1.0-demo"
+dataset: "gaptutor_agent_telemetry"
+
+schema_cleaned:
+  task_id:
+    type: string
+    required: true
+  timestamp:
+    type: string
+    required: true
+  total_execution_time_ms:
+    type: integer
+    required: true
+  is_fallback_triggered:
+    type: boolean
+    required: true
+  prompt_tokens:
+    type: integer
+    required: true
+  completion_tokens:
+    type: integer
+    required: true
+  total_tokens:
+    type: integer
+    required: true
+  thinking_logs:
+    type: array
+    required: true
+    description: "Mảng danh sách các chuỗi suy nghĩ nội bộ của Agent để in ra Terminal Next.js"
+
+quality_rules:
+  - id: "latency_limit"
+    description: "Cảnh báo nếu thời gian phản hồi của demo vượt quá 5 giây"
+    severity: "warn"

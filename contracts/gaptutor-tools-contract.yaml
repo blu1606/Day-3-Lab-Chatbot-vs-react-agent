@@ -1,0 +1,99 @@
+# GapTutor Tool Contract - Demo 4 Giờ
+# Đặc tả danh mục tham số gọi công cụ (Tool Calls) tối giản của AI Agent.
+
+version: "1.0-demo"
+contract_type: "agent_tools"
+
+tools:
+  get_sessions:
+    description: "Lấy danh sách mã và tiêu đề các buổi học đang lưu trên hệ thống"
+    input_payload: {}
+    output_payload:
+      sessions:
+        type: array
+        items:
+          session_id: string
+          title: string
+          concepts: array
+
+  get_session_cohort_data:
+    description: "Truy xuất toàn bộ điểm số bài lab, điểm test và hành vi của lớp trong buổi học"
+    input_payload:
+      session_id:
+        type: string
+        required: true
+    output_payload:
+      students:
+        type: array
+        description: "Mảng danh sách các đối tượng Student định nghĩa trong gaptutor-data-contract.yaml"
+
+  detect_learning_risks:
+    description: "Phát hiện học vẹt (fake_understanding) hoặc học viên yếu âm thầm (silent_at_risk)"
+    input_payload:
+      students:
+        type: array
+        required: true
+    output_payload:
+      risk_flags:
+        type: array
+        items:
+          student_id: string
+          name: string
+          flags: array
+          evidence: array
+
+  group_students:
+    description: "Phân chia học viên vào 3 làn học tập thích ứng"
+    input_payload:
+      students:
+        type: array
+        required: true
+      risk_flags:
+        type: array
+        required: true
+    output_payload:
+      student_groups:
+        type: array
+        items:
+          group_name: string
+          students:
+            type: array
+            items:
+              student_id: string
+              name: string
+          reason: string
+          weak_concepts: array
+
+  generate_remediation_plan:
+    description: "Đề xuất các bước khắc phục lỗ hổng kiến thức theo nhóm yếu"
+    input_payload:
+      groups:
+        type: array
+        required: true
+      weak_concepts:
+        type: array
+        required: true
+    output_payload:
+      remediation_plan:
+        type: array
+        items:
+          group_name: string
+          actions: array
+
+  get_student_detail:
+    description: "Lấy báo cáo chẩn đoán chi tiết và bằng chứng rủi ro của riêng một học viên"
+    input_payload:
+      student_id:
+        type: string
+        required: true
+      session_id:
+        type: string
+        required: true
+    output_payload:
+      student_id: string
+      name: string
+      background: string
+      concept_mastery: object
+      evidence: array
+      diagnosis: string
+      next_actions: array
