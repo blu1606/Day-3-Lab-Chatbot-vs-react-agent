@@ -31,6 +31,7 @@ export type AgentTrace = {
   latencyMs: number;
   promptTokens: number;
   completionTokens: number;
+  costUsd?: number;
   isFallbackTriggered: boolean;
   summary: string;
   steps: TraceStep[];
@@ -96,6 +97,7 @@ export const traces: AgentTrace[] = [
     latencyMs: agentTelemetry.telemetry_metrics.total_execution_time_ms,
     promptTokens: agentTelemetry.telemetry_metrics.prompt_tokens,
     completionTokens: agentTelemetry.telemetry_metrics.completion_tokens,
+    costUsd: agentTelemetry.telemetry_metrics.estimated_cost_usd,
     isFallbackTriggered: agentTelemetry.telemetry_metrics.is_fallback_triggered,
     summary: buildSummary(),
     steps: successTraceSteps,
@@ -108,6 +110,7 @@ export const traces: AgentTrace[] = [
     latencyMs: 410,
     promptTokens: 0,
     completionTokens: 0,
+    costUsd: 0.0,
     isFallbackTriggered: false,
     summary: "Prompt injection bị chặn theo security contract trước khi gọi model.",
     steps: [
@@ -135,6 +138,7 @@ export const traces: AgentTrace[] = [
     latencyMs: 5240,
     promptTokens: 0,
     completionTokens: 0,
+    costUsd: 0.0,
     isFallbackTriggered: true,
     summary: "AI timeout, backend chuyển sang thuật toán ELO tĩnh và vẫn trả kết quả cho mentor.",
     steps: [

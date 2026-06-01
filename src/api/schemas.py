@@ -35,6 +35,7 @@ class Telemetry(BaseModel):
     completion_tokens: int
     total_tokens: int
     thinking_logs: List[str]
+    estimated_cost_usd: float = 0.0
 
 
 class DiagnoseResponse(BaseModel):
