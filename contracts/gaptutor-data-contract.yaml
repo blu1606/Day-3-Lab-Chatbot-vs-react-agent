@@ -1,0 +1,54 @@
+# GapTutor Data Contract - Demo 4 Giờ
+# Định nghĩa cấu trúc tối giản của dữ liệu học viên phục vụ Dashboard.
+
+version: "1.0-demo"
+dataset: "gaptutor_cohort_mastery"
+
+schema_cleaned:
+  student_id:
+    type: string
+    required: true
+  name:
+    type: string
+    required: true
+  background:
+    type: string
+    required: true
+    constraints:
+      enum: ["ai-engineer", "student", "business", "non-tech"]
+  lab_completed:
+    type: boolean
+    required: true
+  lab_score:
+    type: integer
+    required: true
+  diagnostic_score:
+    type: integer
+    required: true
+  variant_question_result:
+    type: string
+    required: true
+    constraints:
+      enum: ["correct", "wrong"]
+  activity_level:
+    type: string
+    required: true
+    constraints:
+      enum: ["low", "medium", "high"]
+  journey_log:
+    type: string
+    required: false
+  concept_mastery:
+    type: object
+    required: true
+    description: "Chứa điểm số của 4 khái niệm RAG: chunking, embedding, retrieval, evaluation"
+
+quality_rules:
+  - id: "fake_understanding"
+    description: "Cảnh báo nếu hoàn thành Lab nhưng làm sai câu hỏi biến thể"
+    severity: "warn"
+
+# Ngưỡng phân loại phục vụ logic chia nhóm tại FastAPI Backend
+thresholds:
+  weak_concept_cutoff: 50
+  needs_foundation_cutoff: 50

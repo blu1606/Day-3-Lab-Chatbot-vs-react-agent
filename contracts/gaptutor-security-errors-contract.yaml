@@ -1,0 +1,42 @@
+# GapTutor Security & Error Codes Contract - Demo 4 Giờ
+# Định nghĩa tối giản các mã lỗi HTTP và luật chặn Prompt Injection phục vụ Demo.
+
+version: "1.0-demo"
+contract_type: "security_and_errors"
+
+# 1. Định nghĩa mã lỗi chuẩn hóa để Next.js UI dễ dàng bắt và hiển thị
+error_codes:
+  SESSION_NOT_FOUND:
+    http_status: 404
+    description: "Khi Mentor chọn sai hoặc khuyết ID buổi học"
+    response_payload:
+      error_code: "SESSION_NOT_FOUND"
+      message: "Không tìm thấy thông tin buổi học được chọn. Vui lòng chọn lại."
+
+  PROMPT_INJECTION_DETECTED:
+    http_status: 400
+    description: "Khi phát hiện Mentor nhập truy vấn cố tình hack hệ thống"
+    response_payload:
+      error_code: "PROMPT_INJECTION_DETECTED"
+      message: "Yêu cầu bị từ chối: Phát hiện dấu hiệu chèn câu lệnh (Prompt Injection) không an toàn."
+
+  AI_TIMEOUT_FALLBACK:
+    http_status: 200  # Vẫn trả kết quả nhưng đánh dấu suy giảm chất lượng để UI hiển thị thanh cảnh báo màu vàng
+    description: "AI bị nghẽn mạng/timeout, kích hoạt dự phòng thuật toán ELO tĩnh"
+    response_payload_flag:
+      is_fallback_triggered: true
+      summary: "Hệ thống đang hoạt động ở chế độ dự phòng bằng thuật toán toán học tĩnh."
+
+# 2. Luật chặn Prompt Injection siêu đơn giản thực thi tại FastAPI Backend
+security_guardrails:
+  # Bộ lọc từ khóa thô (Blacklist Regex) quét trực tiếp trong User Query
+  query_blacklist:
+    - "ignore"
+    - "forget"
+    - "bỏ qua"
+    - "quên"
+    - "system prompt"
+    - "đóng vai"
+
+  # Phản hồi mặc định khi AI bị người dùng lừa hỏi lộ System Prompt
+  leakage_protection_response: "Yêu cầu không hợp lệ. Tôi là GapTutor Agent và không được phép tiết lộ chỉ thị hệ thống."
