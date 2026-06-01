@@ -1,0 +1,134 @@
+{
+  "cohort_summary": {
+    "average_score": 73,
+    "completion_rate": 75,
+    "at_risk_count": 2,
+    "total_students": 8
+  },
+  "weak_concepts": [
+    {
+      "concept": "agentic_loops",
+      "average_mastery": 54,
+      "weak_student_count": 6,
+      "weak_percentage": 75
+    },
+    {
+      "concept": "reasoning",
+      "average_mastery": 59,
+      "weak_student_count": 5,
+      "weak_percentage": 62
+    },
+    {
+      "concept": "evaluation",
+      "average_mastery": 67,
+      "weak_student_count": 4,
+      "weak_percentage": 50
+    },
+    {
+      "concept": "tool_use",
+      "average_mastery": 71,
+      "weak_student_count": 3,
+      "weak_percentage": 38
+    },
+    {
+      "concept": "prompting",
+      "average_mastery": 76,
+      "weak_student_count": 2,
+      "weak_percentage": 25
+    }
+  ],
+  "student_groups": [
+    {
+      "group_name": "Needs Foundation",
+      "students": [
+        {
+          "student_id": "STU003",
+          "name": "Lê Minh C"
+        },
+        {
+          "student_id": "STU006",
+          "name": "Vũ Thị F"
+        }
+      ],
+      "reason": "Học viên đạt điểm dưới 50 trong bài kiểm tra chẩn đoán, chưa nắm vững khái niệm cơ bản",
+      "weak_concepts": [
+        "agentic_loops",
+        "reasoning",
+        "evaluation"
+      ]
+    },
+    {
+      "group_name": "Needs Practice",
+      "students": [
+        {
+          "student_id": "STU004",
+          "name": "Phạm Đức D"
+        },
+        {
+          "student_id": "STU005",
+          "name": "Hoàng Anh E"
+        },
+        {
+          "student_id": "STU008",
+          "name": "Tô Thị H"
+        }
+      ],
+      "reason": "Học viên đạt điểm 50-75, hiểu được các khái niệm cơ bản nhưng cần luyện tập để cải thiện",
+      "weak_concepts": [
+        "agentic_loops",
+        "reasoning"
+      ]
+    },
+    {
+      "group_name": "Ready for Advanced",
+      "students": [
+        {
+          "student_id": "STU001",
+          "name": "Nguyễn Văn A"
+        },
+        {
+          "student_id": "STU002",
+          "name": "Trần Thị B"
+        },
+        {
+          "student_id": "STU007",
+          "name": "Đặng Quang G"
+        }
+      ],
+      "reason": "Học viên đạt điểm trên 75, nắm vững các khái niệm và sẵn sàng cho các bài tập nâng cao",
+      "weak_concepts": []
+    }
+  ],
+  "remediation_plan": [
+    {
+      "group_name": "Needs Foundation",
+      "actions": [
+        "Tổ chức buổi học bổ sung về các khái niệm cơ bản (evaluation, prompting, reasoning)",
+        "Cung cấp tài liệu học tập bổ sung và video hướng dẫn chi tiết",
+        "Lên lịch một-một mentoring với giảng viên để làm rõ khó khăn",
+        "Giao bài tập thực hành nhẹ nhàng và có hướng dẫn từng bước",
+        "Theo dõi tiến độ hàng tuần và điều chỉnh chiến lược hỗ trợ"
+      ]
+    },
+    {
+      "group_name": "Needs Practice",
+      "actions": [
+        "Cung cấp bộ bài tập nâng cao về agentic loops và reasoning",
+        "Tổ chức các phiên thực hành nhóm nhỏ với sự hướng dẫn",
+        "Khuyến khích tham gia các cuộc thảo luận và chia sẻ kinh nghiệm",
+        "Đưa ra các project mini để áp dụng kiến thức vào thực tế",
+        "Cấu trúc các bài học từ dễ đến khó để xây dựng sự tự tin"
+      ]
+    },
+    {
+      "group_name": "Ready for Advanced",
+      "actions": [
+        "Giao các dự án phức tạp liên quan đến tích hợp nhiều khái niệm",
+        "Mời học viên trở thành peer mentor cho các nhóm khác",
+        "Cung cấp tài liệu nghiên cứu nâng cao và các case study thực tế",
+        "Khuyến khích khám phá các ứng dụng tiên tiến của AI Agent",
+        "Chuẩn bị cho các cơ hội thực tập hoặc dự án thực tế"
+      ]
+    }
+  ]
+}

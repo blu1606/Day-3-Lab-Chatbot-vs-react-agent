@@ -1,0 +1,146 @@
+[
+  {
+    "student_id": "STU001",
+    "name": "Nguyễn Văn A",
+    "background": "student",
+    "lab_completed": true,
+    "lab_score": 85,
+    "diagnostic_score": 78,
+    "variant_question_result": "correct",
+    "activity_level": "high",
+    "journey_log": "Học viên có tiến bộ tốt, chủ động hỏi và tham gia các buổi thảo luận",
+    "concept_mastery": {
+      "evaluation": 82,
+      "prompting": 88,
+      "reasoning": 75,
+      "tool_use": 90,
+      "agentic_loops": 70
+    }
+  },
+  {
+    "student_id": "STU002",
+    "name": "Trần Thị B",
+    "background": "ai-engineer",
+    "lab_completed": true,
+    "lab_score": 92,
+    "diagnostic_score": 89,
+    "variant_question_result": "correct",
+    "activity_level": "high",
+    "journey_log": "Học viên xuất sắc, nắm vững các khái niệm và áp dụng tốt",
+    "concept_mastery": {
+      "evaluation": 95,
+      "prompting": 92,
+      "reasoning": 88,
+      "tool_use": 95,
+      "agentic_loops": 90
+    }
+  },
+  {
+    "student_id": "STU003",
+    "name": "Lê Minh C",
+    "background": "non-tech",
+    "lab_completed": false,
+    "lab_score": 45,
+    "diagnostic_score": 42,
+    "variant_question_result": "wrong",
+    "activity_level": "low",
+    "journey_log": "Học viên gặp khó khăn với các khái niệm cơ bản, cần hỗ trợ thêm",
+    "concept_mastery": {
+      "evaluation": 35,
+      "prompting": 40,
+      "reasoning": 30,
+      "tool_use": 38,
+      "agentic_loops": 25
+    }
+  },
+  {
+    "student_id": "STU004",
+    "name": "Phạm Đức D",
+    "background": "business",
+    "lab_completed": true,
+    "lab_score": 68,
+    "diagnostic_score": 65,
+    "variant_question_result": "wrong",
+    "activity_level": "medium",
+    "journey_log": "Học viên có kiến thức nhưng cần luyện tập thêm các kỹ năng thực hành",
+    "concept_mastery": {
+      "evaluation": 60,
+      "prompting": 70,
+      "reasoning": 55,
+      "tool_use": 65,
+      "agentic_loops": 50
+    }
+  },
+  {
+    "student_id": "STU005",
+    "name": "Hoàng Anh E",
+    "background": "student",
+    "lab_completed": true,
+    "lab_score": 77,
+    "diagnostic_score": 72,
+    "variant_question_result": "correct",
+    "activity_level": "medium",
+    "journey_log": "Học viên tiến bộ ổn định, cần thêm bài tập về lập luận logic",
+    "concept_mastery": {
+      "evaluation": 75,
+      "prompting": 80,
+      "reasoning": 65,
+      "tool_use": 78,
+      "agentic_loops": 68
+    }
+  },
+  {
+    "student_id": "STU006",
+    "name": "Vũ Thị F",
+    "background": "ai-engineer",
+    "lab_completed": false,
+    "lab_score": 55,
+    "diagnostic_score": 58,
+    "variant_question_result": "wrong",
+    "activity_level": "low",
+    "journey_log": "Học viên chưa hoàn thành bài tập, cần nhắc nhở và hỗ trợ",
+    "concept_mastery": {
+      "evaluation": 50,
+      "prompting": 55,
+      "reasoning": 45,
+      "tool_use": 52,
+      "agentic_loops": 40
+    }
+  },
+  {
+    "student_id": "STU007",
+    "name": "Đặng Quang G",
+    "background": "student",
+    "lab_completed": true,
+    "lab_score": 88,
+    "diagnostic_score": 85,
+    "variant_question_result": "correct",
+    "activity_level": "high",
+    "journey_log": "Học viên rất tích cực, tham gia tất cả các hoạt động",
+    "concept_mastery": {
+      "evaluation": 86,
+      "prompting": 90,
+      "reasoning": 82,
+      "tool_use": 92,
+      "agentic_loops": 80
+    }
+  },
+  {
+    "student_id": "STU008",
+    "name": "Tô Thị H",
+    "background": "business",
+    "lab_completed": true,
+    "lab_score": 62,
+    "diagnostic_score": 59,
+    "variant_question_result": "wrong",
+    "activity_level": "medium",
+    "journey_log": "Học viên cần cải thiện kỹ năng phân tích",
+    "concept_mastery": {
+      "evaluation": 55,
+      "prompting": 62,
+      "reasoning": 48,
+      "tool_use": 58,
+      "agentic_loops": 45
+    }
+  }
+]
