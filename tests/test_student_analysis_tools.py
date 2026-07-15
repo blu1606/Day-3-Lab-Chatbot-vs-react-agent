@@ -4,6 +4,7 @@ from pathlib import Path
 from src.tools.student_analysis_tools import (
     detect_learning_risks,
     generate_remediation_plan,
+    generate_report_student,
     get_student_detail,
     group_students,
 )
@@ -144,3 +145,29 @@ def test_student_analysis_tools_match_real_data_files():
     assert detail["student_id"] == "STU003"
     assert detail["background"] == "non-tech"
     assert "agentic_loops" in detail["concept_mastery"]
+
+
+def test_generate_report_student_returns_api_ready_student_status_report():
+    students = json.loads(Path("data/students.json").read_text(encoding="utf-8"))
+
+    report = generate_report_student(students)
+
+    assert report["report_type"] == "student_status_report"
+    assert report["total_students"] == 8
+    assert report["at_risk_count"] == 4
+    assert report["group_counts"] == {
+        "Needs Foundation": 2,
+        "Needs Practice": 3,
+        "Ready for Advanced": 3,
+    }
+    assert len(report["students"]) == 8
+
+    stu003 = next(student for student in report["students"] if student["student_id"] == "STU003")
+    assert stu003["name"] == "Lê Minh C"
+    assert stu003["group_name"] == "Needs Foundation"
+    assert stu003["average_mastery"] == 34
+    assert stu003["risk_level"] == "high"
+    assert stu003["risk_flags"] == ["silent_at_risk"]
+    assert "agentic_loops" in stu003["weak_concepts"]
+    assert stu003["evidence"]
+    assert stu003["next_actions"]
